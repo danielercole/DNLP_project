@@ -45,7 +45,7 @@ Note: all the files the end with *DO* are related to the extension in which we s
 
 
 ## Authors
-Alessandro Arneodo, 
-[Daniele Ercole](https://github.com/danielercole), 
 [Davide Fassio](https://github.com/Davidefassio), 
-Alessia Manni
+[Daniele Ercole](https://github.com/danielercole), 
+Alessia Manni,
+Alessandro Arneodo
