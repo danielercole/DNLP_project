@@ -1,6 +1,9 @@
 # Text-Style-Transfer with CycleGAN: Decoder-only Models and Italian Datasets
 This repository contains the code for the final project of the Deep Natural Language Processing course for the 2024/2025 academic year at Politecnico di Torino.
 
+The paper that describe this work can be read [here](https://github.com/danielercole/paper.pdf).
+
+
 This work is based on the the paper [Self-supervised Text Style Transfer using Cycle-Consistent Adversarial Networks](https://dl.acm.org/doi/10.1145/3678179), published in ACM Transactions on Intelligent Systems and Technology.
 
 It includes the Python package to train and test the CycleGAN architecture for Text Style Transfer described in the paper and all the extensions presented in this project.
@@ -39,9 +42,9 @@ We use the [Yelp](https://papers.nips.cc/paper_files/paper/2017/hash/2d2c8394e31
 
 ## Training and testing
 You can train and test all the extensions to the orginal work simply running the notebooks presented in the `notebooks` directory.
-Every jupiter notebook is though to be runned on Google Colab and can be easily customized to change the training setup. For the full explaination of the several command line arguments link here the GitHub folder of the [original project](https://github.com/gallipoligiuseppe/TST-CycleGAN/tree/main).
+Every jupiter notebook is though to be runned on Google Colab and can be easily customized to change the training setup. For the full explaination of the several command line arguments we link here the GitHub folder of the [original project](https://github.com/gallipoligiuseppe/TST-CycleGAN/tree/main).
 
-Note: all the files the end with *DO* are related to the extension in which we substitute the generator with a Decoder-Only model like GPT2-Instruct. All the files that end with *CTRL*, instead, are related to the Text Style Transfer done with Salesforce’s CTRL.
+**Note**: all the files the end with *DO* are related to the extension in which we substitute the generator with a Decoder-Only model like GPT2-Instruct. All the files that end with *CTRL*, instead, are related to the Text Style Transfer done with Salesforce’s CTRL.
 
 
 ## Authors
