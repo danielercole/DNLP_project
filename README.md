@@ -1,14 +1,14 @@
-# DNLP_project
+# Text-Style-Transfer with CycleGAN: Decoder-only Models and Italian Datasets
+This repository contains the code for the final project of the Deep Natural Language Processing course for the 2024/2025 academic year at Politecnico di Torino.
 
-# Self-supervised Text Style Transfer using Cycle-Consistent Adversarial Networks
-This repository contains the code for the paper [Self-supervised Text Style Transfer using Cycle-Consistent Adversarial Networks](https://dl.acm.org/doi/10.1145/3678179), published in ACM Transactions on Intelligent Systems and Technology.
+This work is based on the the paper [Self-supervised Text Style Transfer using Cycle-Consistent Adversarial Networks](https://dl.acm.org/doi/10.1145/3678179), published in ACM Transactions on Intelligent Systems and Technology.
 
-It includes the Python package to train and test the CycleGAN architecture for Text Style Transfer described in the paper.
+It includes the Python package to train and test the CycleGAN architecture for Text Style Transfer described in the paper and all the extensions presented in this project.
 
 ## Installation
 The following command will clone the project:
 ```
-git clone https://github.com/gallipoligiuseppe/TST-CycleGAN.git
+git clone https://github.com/danielercole/DNLP_project.git
 ```
 
 To install the required libraries and dependencies, you can refer to the `env.yml` file.
@@ -19,70 +19,33 @@ conda create -f env.yml -n cyclegan_tst
 conda activate cyclegan_tst
 ```
 
-The installation should also cover all the dependencies. If you find any missing dependency, please let us know by opening an issue.
+The installation should also cover all the dependencies..
 
-## Usage
-The package provides the scripts to implement, train and test the CycleGAN architecture for Text Style Transfer described in the paper.
-
-Specifically, we focus on *formality* (informal ↔ formal) and *sentiment* (negative ↔ positive) transfer tasks.
 
 ## Data
+### Verse to prose
+We take the original text of the *Divina Commedia* from [Wikisource](https://it.wikisource.org/wiki/Divina_Commedia)
+and the corresponding prose interpretation from this [website](https://www.orlandofurioso.com/parafrasi-dei-canti-dellinferno-prima-cantica-del-poema-divina-commedia/). The final dataset can be found in `data/dante` and the files name follow the rules of the original work, so are of the form `[train|dev|test].[0|1].txt`, where 0 is for the original verses and 1 is for the prose interpretation.
+
 ### Formality transfer
-According to the dataset license, you can request access to the [GYAFC](https://aclanthology.org/N18-1012/) dataset following the steps described in its official [repository](https://github.com/raosudha89/GYAFC-corpus).
+According to the dataset license, you can request access to the [XFORMAL](https://arxiv.org/abs/2104.04108) dataset following the steps described in its official [repository](https://github.com/Elbria/xformal-FoST).
 
-Once you have gained access, put it into the `family_relationships` and `entertainment_music` directories for the *Family & Relationships* and *Entertainment & Music* domains, respectively, under the `data/GYAFC` folder. Please name the files as `[train|dev|test].[0|1].txt`, where 0 is for informal style and 1 is for formal style.
 
-We could provide access to *mixed-style* data we use in our work after gaining access to the GYAFC dataset and verifying the dataset license.
+Once you have gained access, put it into the `family_relationships` directory for the *Family & Relationships* domains, under the `data/XFORMAL` folder. Please name the files as `[train|dev|test].[0|1].txt`, where 0 is for informal style and 1 is for formal style.
+
 
 ### Sentiment transfer
 We use the [Yelp](https://papers.nips.cc/paper_files/paper/2017/hash/2d2c8394e31101a261abf1784302bf75-Abstract.html) dataset following the same splits as in [Li et al.](https://aclanthology.org/N18-1169/) available in the official [repository](https://github.com/lijuncen/Sentiment-and-Style-Transfer). Put it into the `data/yelp` folder and please name the files as `[train|dev|test].[0|1].txt`, where 0 is for negative sentiment and 1 is for positive sentiment.
 
-## Training
-You can train the proposed CycleGAN architecture for Text Style Transfer using the `train.py` script. It can be customized using several command line arguments such as:
-- style_a/style_b: style A/B (i.e., informal/formal or negative/positive)
-- generator_model_tag: tag or path of the generator model
-- discriminator_model_tag: tag or path of the discriminator model
-- pretrained_classifier_model: tag or path of the style classifier model
-- lambdas: loss weighting factors in the form "λ1|λ2|λ3|λ4|λ5" for cycle-consistency, generator, discriminator (fake), discriminator (real), and classifier-guided losses, respectively
-- path_mono_A/path_mono_B: path to the training dataset for style A/B
-- path_mono_A_eval/path_mono_B_eval: path to the validation dataset for style A/B (if references for validation are not available, as in the Yelp dataset)
-- path_paral_A_eval/path_paral_B_eval: path to the validation dataset for style A/B (if references for validation are available, as in the GYAFC dataset)
-- path_paral_eval_ref: path to the references for validation (if references available, as in the GYAFC dataset)
-- learning_rate, epochs, batch_size: learning rate, number of epochs and batch size for model training
+## Training and testing
+You can train and test all the extensions to the orginal work simply running the notebooks presented in the `notebooks` directory.
+Every jupiter notebook is though to be runned on Google Colab and can be easily customized to change the training setup. For the full explaination of the several command line arguments link here the GitHub folder of the [original project](https://github.com/gallipoligiuseppe/TST-CycleGAN/tree/main).
 
-As an example, to train the CycleGAN architecture for formality transfer using the GYAFC dataset (*Family & Relationships* domain), you can use the following command:
-```
-CUDA_VISIBLE_DEVICES=0 python train.py --style_a=informal --style_b=formal --lang=en \
-                       --path_mono_A=./data/GYAFC/family_relationships/train.0.txt --path_mono_B=./data/GYAFC/family_relationships/train.1.txt \
-                       --path_paral_A_eval=./data/GYAFC/family_relationships/dev.0.txt --path_paral_B_eval=./data/GYAFC/family_relationships/dev.1.txt --path_paral_eval_ref=./data/GYAFC/family_relationships/references/dev/ --n_references=4 --shuffle \
-                       --generator_model_tag=google-t5/t5-large --discriminator_model_tag=distilbert-base-cased --pretrained_classifier_model=./classifiers/GYAFC/family_relationships/bert-base-cased_5/ \
-                       --lambdas="10|1|1|1|1" --epochs=30 --learning_rate=5e-5 --max_sequence_length=64 --batch_size=8  \
-                       --save_base_folder=./ckpts/ --save_steps=1 --eval_strategy=epochs --eval_steps=1  --pin_memory --use_cuda_if_available
-```
-
-## Testing
-Once trained, you can evaluate the performance on the test set of the trained models using the `test.py` script. It can be customized using several command line arguments such as:
-- style_a/style_b: style A/B (i.e., informal/formal or negative/positive)
-- generator_model_tag: tag or path of the generator model
-- discriminator_model_tag: tag or path of the discriminator model
-- from_pretrained: folder to use as base path to load the model checkpoint(s) to test
-- pretrained_classifier_eval: tag or path of the oracle classifier model
-- path_paral_A_test/path_paral_B_test: path to the test dataset for style A/B
-- path_paral_test_ref: path to the references for test
-
-As an example, to test the trained models for formality transfer using the GYAFC dataset (*Family & Relationships* domain), you can use the following command:
-```
-CUDA_VISIBLE_DEVICES=0 python test.py --style_a=informal --style_b=formal --lang=en \
-                       --path_paral_A_test=./data/GYAFC/family_relationships/test.0.txt --path_paral_B_test=./data/GYAFC/family_relationships/test.1.txt --path_paral_test_ref=./data/GYAFC/family_relationships/references/test/ --n_references=4 \
-                       --generator_model_tag=google-t5/t5-large --discriminator_model_tag=distilbert-base-cased \
-                       --pretrained_classifier_eval=./classifiers/GYAFC/family_relationships/bert-base-cased_5/ \
-                       --from_pretrained=./ckpts/ --max_sequence_length=64 --batch_size=16 --pin_memory --use_cuda_if_available 
-```
-
+Note: all the files the end with *DO* are related to the extension in which we substitute the generator with a Decoder-Only model like GPT2-Instruct. All the files that end with *CTRL*, instead, are related to the Text Style Transfer done with Salesforce’s CTRL.
 
 
 ## Authors
-Alessandro Arneodo
-[Daniele Ercole](https://github.com/danielercole)
-[Davide Fassio](https://github.com/Davidefassio)
+Alessandro Arneodo, 
+[Daniele Ercole](https://github.com/danielercole), 
+[Davide Fassio](https://github.com/Davidefassio), 
 Alessia Manni
