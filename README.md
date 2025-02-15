@@ -1,7 +1,7 @@
 # Text-Style-Transfer with CycleGAN: Decoder-only Models and Italian Datasets
 This repository contains the code for the final project of the Deep Natural Language Processing course for the 2024/2025 academic year at Politecnico di Torino.
 
-The paper that describe this work can be read [here](https://github.com/danielercole/paper.pdf).
+The paper that describe this work can be read [here](https://github.com/danielercole/DNLP_project/blob/main/paper.pdf).
 
 
 This work is based on the the paper [Self-supervised Text Style Transfer using Cycle-Consistent Adversarial Networks](https://dl.acm.org/doi/10.1145/3678179), published in ACM Transactions on Intelligent Systems and Technology.
